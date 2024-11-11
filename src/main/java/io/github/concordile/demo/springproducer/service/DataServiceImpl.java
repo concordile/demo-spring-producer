@@ -16,12 +16,13 @@
 
 package io.github.concordile.demo.springproducer.service;
 
-import io.github.concordile.demo.springproducer.domain.DataDomain;
-import io.github.concordile.demo.springproducer.payload.DataResponse;
 import io.github.concordile.demo.springproducer.converter.DataDomain2ResponseConverter;
 import io.github.concordile.demo.springproducer.converter.DataRequest2DomainConverter;
+import io.github.concordile.demo.springproducer.domain.DataDomain;
 import io.github.concordile.demo.springproducer.payload.DataRequest;
+import io.github.concordile.demo.springproducer.payload.DataResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DataServiceImpl implements DataService {
@@ -43,6 +45,7 @@ public class DataServiceImpl implements DataService {
     public DataResponse insert(DataRequest data) {
         DataDomain domain = dataRequest2DomainConverter.convert(data);
         dataById.put(domain.getId(), domain);
+        log.info("Created new value - {}", domain);
         return dataDomain2ResponseConverter.convert(domain);
     }
 
@@ -62,11 +65,13 @@ public class DataServiceImpl implements DataService {
     @Override
     public void remove(String dataId) {
         dataById.remove(dataId);
+        log.info("Removed value by id: {}", dataId);
     }
 
     @Override
     public void removeAll() {
         dataById.clear();
+        log.info("Removed all values");
     }
 
 }
