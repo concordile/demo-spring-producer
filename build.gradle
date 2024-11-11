@@ -6,9 +6,14 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'io.github.projectleopold.demo'
-version = '0.1.0-RC2'
-sourceCompatibility = '17'
+group = 'io.github.concordile.demo'
+version = '0.1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 configurations {
     compileOnly {
@@ -26,6 +31,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 dependencyManagement {
@@ -34,13 +40,16 @@ dependencyManagement {
     }
 }
 
-test {
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('contractTest') {
     useJUnitPlatform()
 }
 
 contracts {
-    testFramework = 'JUNIT5'
-    def pkg = 'io.github.projectleopold.demo.springproducer'
+    def pkg = 'io.github.concordile.demo.springproducer'
     basePackageForTests = pkg
     baseClassMappings {
         baseClassMapping('spring-consumer.rest', "${pkg}.springconsumer.SpringConsumerRestContractTest")
@@ -57,7 +66,7 @@ publishing {
         maven {
             name = 'GitHubPackages'
             def mavenUrl = project.findProject('github.pkg.maven.url') ?: System.getenv('GITHUB_MAVEN_URL')
-            url = "${mavenUrl}/projectleopold/demo-spring-producer"
+            url = "${mavenUrl}/concordile/demo-spring-producer"
             credentials {
                 username = project.findProperty('github.username') ?: System.getenv('GITHUB_ACTOR')
                 password = project.findProperty('github.token') ?: System.getenv('GITHUB_TOKEN')
