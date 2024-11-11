@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-import org.springframework.cloud.contract.spec.Contract
+package io.github.concordile.demo.springproducer;
 
-Contract.make {
-    request {
-        method POST()
-        url '/api/datum'
-        headers {
-            contentType applicationJson()
-        }
-        body(
-                id: $(regex('id-.+')),
-                data: $(regex('value-.+'))
-        )
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ProducerApplicationTests {
+
+    @Test
+    void contextLoads() {
     }
-    response {
-        status OK()
-        headers {
-            contentType applicationJson()
-        }
-        body(
-                id: fromRequest().body('$.id'),
-                data: fromRequest().body('$.data')
-        )
-    }
+
 }

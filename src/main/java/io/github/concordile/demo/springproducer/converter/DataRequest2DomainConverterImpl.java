@@ -14,28 +14,23 @@
  * limitations under the License.
  */
 
-import org.springframework.cloud.contract.spec.Contract
+package io.github.concordile.demo.springproducer.converter;
 
-Contract.make {
-    request {
-        method POST()
-        url '/api/datum'
-        headers {
-            contentType applicationJson()
-        }
-        body(
-                id: $(regex('id-.+')),
-                data: $(regex('value-.+'))
-        )
+import io.github.concordile.demo.springproducer.domain.DataDomain;
+import io.github.concordile.demo.springproducer.payload.DataRequest;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DataRequest2DomainConverterImpl implements DataRequest2DomainConverter {
+
+    @NonNull
+    @Override
+    public DataDomain convert(DataRequest source) {
+        return DataDomain.builder()
+                .id(source.getId())
+                .value(source.getData())
+                .build();
     }
-    response {
-        status OK()
-        headers {
-            contentType applicationJson()
-        }
-        body(
-                id: fromRequest().body('$.id'),
-                data: fromRequest().body('$.data')
-        )
-    }
+
 }

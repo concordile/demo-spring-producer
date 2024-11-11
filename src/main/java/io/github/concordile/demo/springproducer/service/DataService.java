@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-import org.springframework.cloud.contract.spec.Contract
+package io.github.concordile.demo.springproducer.service;
 
-Contract.make {
-    request {
-        method POST()
-        url '/api/datum'
-        headers {
-            contentType applicationJson()
-        }
-        body(
-                id: $(regex('id-.+')),
-                data: $(regex('value-.+'))
-        )
-    }
-    response {
-        status OK()
-        headers {
-            contentType applicationJson()
-        }
-        body(
-                id: fromRequest().body('$.id'),
-                data: fromRequest().body('$.data')
-        )
-    }
+import io.github.concordile.demo.springproducer.payload.DataRequest;
+import io.github.concordile.demo.springproducer.payload.DataResponse;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface DataService {
+
+    DataResponse insert(DataRequest data);
+
+    Optional<DataResponse> find(String dataId);
+
+    List<DataResponse> findAll();
+
+    void remove(String dataId);
+
+    void removeAll();
+
 }
