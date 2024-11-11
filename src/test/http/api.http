@@ -1,0 +1,17 @@
+### Create
+POST {{apiUrl}}/api/datum
+Content-Type: application/json
+
+{
+  "id": "test-id",
+  "data": "test-data"
+}
+
+### Get
+GET {{apiUrl}}/api/datum/test-id
+
+### Get all
+GET {{apiUrl}}/api/datum
+
+### Delete
+DELETE {{apiUrl}}/api/datum/test-id
