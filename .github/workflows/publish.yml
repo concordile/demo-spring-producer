@@ -15,18 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup JDK
-        uses: actions/setup-java@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Publish stubs to GitHub Packages
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: publishStubsPublicationToGitHubPackagesRepository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_MAVEN_URL: https://maven.pkg.github.com
+        run: gradle publishStubsPublicationToGitHubPackagesRepository
